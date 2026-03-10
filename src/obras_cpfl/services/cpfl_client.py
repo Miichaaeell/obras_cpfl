@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from requests import get
 
-from obras_cpfl.utils.formatters import format_message, format_response
+from obras_cpfl.utils.parse_works_response import format_message, format_response
 
 
 class CPFLWorksClient:
@@ -9,18 +9,25 @@ class CPFLWorksClient:
     def __init__(self):
         self.__start_date: datetime = datetime.now().date()
         self.__end_date: datetime = self.__start_date + timedelta(days=7)
-        self.__url = ("https://spir.cpfl.com.br/api/ConsultaDesligamentoProgramado/",)
         self.__url = (
-            f"https://spir.cpfl.com.br/api/ConsultaDesligamentoProgramado/Pesquisar?"
-            f"PeriodoDesligamentoInicial={self.__start_date}&PeriodoDesligamentoFinal={self.__end_date}&"
-            "IdMunicipio={city}&NomeBairro=&NomeRua=&null"
+            "https://spir.cpfl.com.br/api/ConsultaDesligamentoProgramado/Pesquisar?"
         )
         self.__city: dict = {"Cosmopolis": 59, "Paulinia": 116}
 
     def search_works(self) -> list[dict]:
         responses: list = []
         for key, value in self.__city.items():
-            responses.append(get(url=self.__url.format(city=value)).json())
+            responses.append(
+                get(
+                    url=self.__url,
+                    params={
+                        "PeriodoDesligamentoInicial": self.__start_date,
+                        "PeriodoDesligamentoFinal": self.__end_date,
+                        "IdMunicipio": value,
+                    },
+                    timeout=30,
+                ).json()
+            )
         return format_message(responses)
 
     def works_week(self) -> str:

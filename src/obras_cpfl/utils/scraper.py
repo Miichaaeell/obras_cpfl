@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 
 from obras_cpfl.services.tinyurl_client import TinyUrl
+from obras_cpfl.settings import console
 
 
 def get_link_pdf(tes_number: str) -> str:
@@ -16,8 +17,8 @@ def get_link_pdf(tes_number: str) -> str:
         ).get("href")
         if " " in path_pdf:
             path_pdf = quote(path_pdf)
-    except Exception as e:
-        print(e)
+    except AttributeError as e:
+        console.log(e)
         return "Não encontrado link do PDF"
     tiny = TinyUrl()
     short_url = tiny.search(tes_number)

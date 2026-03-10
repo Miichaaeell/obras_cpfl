@@ -20,7 +20,7 @@ class TinyUrl:
             "alias": str(f"TES-{tes_number}"),
             "description": "string",
         }
-        response = post(url=base_url, json=payload, headers=self.__headers)
+        response = post(url=base_url, json=payload, headers=self.__headers, timeout=30)
         if response.status_code == 200:
             return response.json()["data"]["tiny_url"]
         else:
@@ -30,7 +30,7 @@ class TinyUrl:
 
     def search(self, tes_number: str) -> str | None:
         base_url = f"{self.__url}alias/tinyurl.com/TES-{tes_number}"
-        response = get(url=base_url, headers=self.__headers)
+        response = get(url=base_url, headers=self.__headers, timeout=30)
 
         return (
             response.json()["data"]["tiny_url"] if response.status_code == 200 else None

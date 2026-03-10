@@ -3,19 +3,20 @@ from time import sleep
 from obras_cpfl.services.textmebot_client import TextMeBot
 from obras_cpfl.services.cpfl_client import CPFLWorksClient
 
-from obras_cpfl.settings import SEND_NUMBERS, log
+from obras_cpfl.settings import SEND_NUMBERS, console
 
 
 def main():
-    cpfl_cliet = CPFLWorksClient()
-    msg = cpfl_cliet.works_week()
-    send_numbers: list[str] = [number for number in str(SEND_NUMBERS).split(",")]
+    cpfl_client = CPFLWorksClient()
+    msg = cpfl_client.works_week()
+    send_numbers: list[str] = [
+        number.strip() for number in str(SEND_NUMBERS).split(",") if number.strip()
+    ]
     bot = TextMeBot()
-    print(msg)
-    log.info(msg)
+    console.log(f"\n{msg}", style="green")
     for number in send_numbers:
         res = bot.notification(number, msg)
-        log.info(res)
+        console.log(res)
         sleep(6)
 
 
