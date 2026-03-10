@@ -1,0 +1,26 @@
+import re
+from requests import get
+from bs4 import BeautifulSoup
+from urllib.parse import quote
+
+from obras_cpfl.services.tinyurl_client import TinyUrl
+
+
+def get_link_pdf(tes_number: str) -> str:
+    base_url = "http://201.130.20.15:8609"
+    response = get(base_url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    try:
+        path_pdf = soup.find(
+            class_=re.compile("bg-green"), href=re.compile(f"{tes_number}")
+        ).get("href")
+        if " " in path_pdf:
+            path_pdf = quote(path_pdf)
+    except Exception as e:
+        print(e)
+        return "Não encontrado link do PDF"
+    tiny = TinyUrl()
+    short_url = tiny.search(tes_number)
+    if not short_url:
+        short_url = tiny.create(url=f"{base_url}{path_pdf}", tes_number=tes_number)
+    return short_url
