@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from requests import get
 
-from obras_cpfl.utils.parse_works_response import format_message, format_response
+from obras_cpfl.utils.parse_workes_response import complete_response, format_response
 
 
 class CPFLWorksClient:
@@ -28,7 +28,7 @@ class CPFLWorksClient:
                     timeout=30,
                 ).json()
             )
-        return format_message(responses)
+        return complete_response(responses)
 
     def works_week(self) -> str:
         works = self.search_works()

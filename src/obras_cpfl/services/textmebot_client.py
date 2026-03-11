@@ -1,5 +1,5 @@
 from requests import post
-
+from bs4 import BeautifulSoup
 from obras_cpfl.settings import TEXTMEBOT_TOKEN
 
 
@@ -14,5 +14,6 @@ class TextMeBot:
             params={"recipient": f"+{number}", "apikey": self.__api_key, "text": msg},
             timeout=30,
         )
+        bs = BeautifulSoup(res.content, "html.parser")
 
-        return res.json()
+        return bs.text
