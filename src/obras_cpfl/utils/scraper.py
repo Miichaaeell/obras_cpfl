@@ -1,5 +1,4 @@
 import re
-from time import sleep
 from requests import get
 from bs4 import BeautifulSoup
 from urllib.parse import quote
@@ -10,7 +9,6 @@ from obras_cpfl.settings import console
 
 def get_link_pdf(tes_number: str) -> str:
     with console.status("Gerando link pdf...", spinner="arrow3"):
-        sleep(0.5)
         base_url = "http://201.130.20.15:8609"
         response = get(base_url)
         soup = BeautifulSoup(response.content, "html.parser")

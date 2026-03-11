@@ -18,6 +18,7 @@ def parse_works_response(responses: list[dict]) -> list[dict] | None:
                 if datas:
                     for data in datas:
                         date = data["Data"]
+                        date_formated = ""
                         if "T" in date:
                             date = str(date).split("T")[0].split("-")
                         try:
@@ -28,62 +29,56 @@ def parse_works_response(responses: list[dict]) -> list[dict] | None:
                                     day=int(date[2]),
                                 )
                             )
-                        except Exception as e:
-                            log.exception(e)
+                        except Exception:
+                            log.exception("Erro ao formatar data")
                         documents = data.get("Documentos") or None
                         if documents:
                             for indice in range(0, len(documents)):
-                                with console.status(
-                                    "Criando payload de resposta...",
-                                    spinner="aesthetic",
-                                ):
-                                    tes_document = documents[indice].get(
-                                        "DescricaoDocumento", ""
-                                    )
-                                    status = documents[indice].get("Estado", "")
-                                    bairros = documents[indice].get("Bairros") or []
-                                    bairro = (
-                                        bairros[0].get("NomeBairro") if bairros else ""
-                                    )
-                                    ruas = bairros[0].get("Ruas") or []
-                                    rua = ruas[0].get("NomeRua") or ""
-                                    hora_inicial = (
-                                        documents[indice].get("PeriodoExecucaoInicial")
-                                        or ""
-                                    )
-                                    if hora_inicial.strip():
-                                        if "T" in hora_inicial:
-                                            hora_inicial = hora_inicial.split("T")[1]
-                                    hora_final = (
-                                        documents[indice].get(
-                                            "PeriodoExecucaoPeriodoFinal"
-                                        )
-                                        or ""
-                                    )
-                                    if hora_final.strip():
-                                        if "T" in hora_final:
-                                            hora_final = hora_final.split("T")[1]
-                                    works.append(
-                                        {
-                                            "Cidade": city,
-                                            "Data": date_formated,
-                                            "Documento": tes_document,
-                                            "Status": status,
-                                            "Horario de início": hora_inicial,
-                                            "Horario do final": hora_final,
-                                            "Bairro": bairro,
-                                            "Rua": rua,
-                                        }
-                                    )
+                                tes_document = documents[indice].get(
+                                    "DescricaoDocumento", ""
+                                )
+                                status = documents[indice].get("Estado", "")
+                                bairros = documents[indice].get("Bairros") or []
+                                bairros = bairros[0] if bairros else {}
+                                bairro = bairros.get("NomeBairro") if bairros else ""
+                                ruas = bairros.get("Ruas") or []
+                                rua = ruas[0] if ruas else {}
+                                rua = rua.get("NomeRua") or ""
+                                hora_inicial = (
+                                    documents[indice].get("PeriodoExecucaoInicial")
+                                    or ""
+                                )
+                                if hora_inicial.strip():
+                                    if "T" in hora_inicial:
+                                        hora_inicial = hora_inicial.split("T")[1]
+                                hora_final = (
+                                    documents[indice].get("PeriodoExecucaoPeriodoFinal")
+                                    or ""
+                                )
+                                if hora_final.strip():
+                                    if "T" in hora_final:
+                                        hora_final = hora_final.split("T")[1]
+                                works.append(
+                                    {
+                                        "Cidade": city,
+                                        "Data": date_formated,
+                                        "Documento": tes_document,
+                                        "Status": status,
+                                        "Horario de início": hora_inicial,
+                                        "Horario do final": hora_final,
+                                        "Bairro": bairro,
+                                        "Rua": rua,
+                                    }
+                                )
     return works if works else []
 
 
 def complete_response(responses: list) -> list[dict]:
     workers_list = parse_works_response(responses=responses)
     for worker in workers_list:
-        tes_number = worker["Documento"].split(" ")[1]
-
-        worker["PDF"] = get_link_pdf(tes_number=tes_number)
+        if " " in worker["Documento"].strip():
+            tes_number = worker["Documento"].split(" ")[1]
+            worker["PDF"] = get_link_pdf(tes_number=tes_number)
     return workers_list
 
 
