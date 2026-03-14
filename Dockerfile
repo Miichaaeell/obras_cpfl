@@ -22,7 +22,7 @@ RUN poetry install --no-root
 
 COPY . /app
 
-RUN echo "*/2 * * * * cd /app && PYTHONPATH=/app/src /usr/local/bin/python -m obras_cpfl.main >> /proc/1/fd/1 2>> /proc/1/fd/2" > /etc/cron.d/obras-cpfl
+RUN echo "0 8 * * * cd /app && PYTHONPATH=/app/src /usr/local/bin/python -m obras_cpfl.main >> /proc/1/fd/1 2>> /proc/1/fd/2" > /etc/cron.d/obras-cpfl
 
 RUN chmod 0644 /etc/cron.d/obras-cpfl && crontab /etc/cron.d/obras-cpfl
 
