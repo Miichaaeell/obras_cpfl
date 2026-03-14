@@ -13,7 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     cron \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+ENV TZ=America/Sao_Paulo
 
 RUN pip install --no-cache-dir "poetry==$POETRY_VERSION"
 
