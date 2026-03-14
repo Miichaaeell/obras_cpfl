@@ -17,6 +17,9 @@ log = logging.getLogger("rich")
 console = Console(color_system="truecolor", force_terminal=True)
 
 
-TEXTMEBOT_TOKEN = os.getenv("TEXTMEBOT_TOKEN")
-TINY_TOKEN = os.getenv("TINY_TOKEN")
-SEND_NUMBERS = os.getenv("SEND_NUMBERS")
+TINY_TOKEN = os.getenv("TINY_TOKEN", "")
+SEND_NUMBERS = os.getenv("SEND_NUMBERS", [])
+
+EVO_API_KEY = os.getenv("EVO_API_KEY", "")
+EVO_URL = os.getenv("EVO_URL", "")
+INSTANCE = os.getenv("INSTANCE", "")

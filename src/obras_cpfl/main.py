@@ -2,7 +2,7 @@ from time import sleep
 from rich.panel import Panel
 from rich import print
 
-from obras_cpfl.services.textmebot_client import TextMeBot
+from obras_cpfl.services.evolution_client import EvolutinClient
 from obras_cpfl.services.cpfl_client import CPFLWorksClient
 
 from obras_cpfl.settings import SEND_NUMBERS, console, log
@@ -19,7 +19,7 @@ def main():
                 for number in str(SEND_NUMBERS).split(",")
                 if number.strip()
             ]
-            bot = TextMeBot()
+            bot = EvolutinClient()
             for number in send_numbers:
                 res = bot.notification(number, msg)
                 log.info(res)
