@@ -1,5 +1,5 @@
 from requests import post
-from obras_cpfl.settings import EVO_API_KEY, EVO_URL, INSTANCE, log
+from obras_cpfl.settings import EVO_API_KEY, EVO_URL, INSTANCE
 
 
 class EvolutinClient:
@@ -17,6 +17,4 @@ class EvolutinClient:
             json=payload,
             timeout=10,
         )
-        log.info(res)
-
         return res
