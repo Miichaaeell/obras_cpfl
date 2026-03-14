@@ -37,4 +37,5 @@ def main():
 
 
 if __name__ == "__main__":
+    log.info("Iniciando busca das obras CPFL")
     main()
