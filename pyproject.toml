@@ -1,7 +1,7 @@
 [project]
 name = "obras-cpfl"
 version = "0.1.0"
-description = ""
+description = "Monitor de obras CPFL"
 authors = [
     {name = "Michael Andrew",email = "miichaaeell.andrew@gmail.com"}
 ]
@@ -16,6 +16,7 @@ dependencies = [
 
 [tool.poetry]
 packages = [{include = "obras_cpfl", from = "src"}]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
