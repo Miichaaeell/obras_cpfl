@@ -1,8 +1,5 @@
 import logging.config
 from typing import Any
-from rich.console import Console
-
-console = Console(color_system="truecolor", force_terminal=True)
 
 
 LOGGING_CONFIG: dict[str, Any] = {
@@ -10,7 +7,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "format": "[cpfl]|%(message)s",
+            "format": "%(message)s",
             "datefmt": "%d-%m-%Y %H:%M",
         },
     },
@@ -22,7 +19,7 @@ LOGGING_CONFIG: dict[str, Any] = {
             "rich_tracebacks": True,
         },
     },
-    "root": {"handlers": ["rich"]},
+    "root": {"handlers": ["rich"], "level": "INFO"},
     "loggers": {
         "cpfl": {
             "level": "INFO",
@@ -30,4 +27,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     },
 }
 
-logging.config.dictConfig(LOGGING_CONFIG)
+
+def setup_logging(logger_name: str) -> logging.Logger:
+    logging.config.dictConfig(LOGGING_CONFIG)
+    return logging.getLogger(logger_name)
